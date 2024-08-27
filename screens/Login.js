@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,9 +9,16 @@ export const Login = () => {
   const [userPassword, setPassword] = useState('');
   const navigation = useNavigation();
 
-  const handleButtonPress = () => {
+  const handleButtonPress = async(userEmail, userPassword) => {
     console.log('Email:', userEmail);
     console.log('Password:', userPassword);
+
+    const Data = {
+      user: userEmail,
+      password: userPassword,
+    }
+
+    await AsyncStorage.setItem('Datos del usuario:', JSON.stringify(Data));
 
     navigation.navigate('Ofertas');
   };
@@ -20,7 +28,7 @@ export const Login = () => {
       <View style={styles.contenedor}>
         <Text style={styles.titulo}>Iniciar Sesión</Text>
         <View
-          style={{ backgroundColor: 'orange', width: 100, height: 2, marginBottom: 10 }}
+          style={{ backgroundColor: '#4c2882', width: 100, height: 2, marginBottom: 10 }}
         ></View>
         <TextInput
           style={styles.cajaTexto}
@@ -43,7 +51,7 @@ export const Login = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.botonLogin}
-          onPress={handleButtonPress}
+          onPress={() => handleButtonPress(userEmail, userPassword)}
         >
           <Text style={{ fontSize: 20 }}>Login</Text>
         </TouchableOpacity>
